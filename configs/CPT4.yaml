@@ -1,0 +1,76 @@
+#base options
+mode: "binary"
+arch: "res50"                                  #architecture for binary classification
+dataroot: "" #path to images (should have subfolders trainA, trainB, valA, valB, etc)
+classes: ["car","cat","chair","horse"]                     #image classes to train on
+class_bal: True
+batch_size: 64                                 #input batch size
+loadSize: 256                                  #scale images to this size
+cropSize: 224                                  #then crop to this size
+name: ""                                       #name of the experiment. It decides where to store samples and models
+num_threads: 16                                #threads for loading data
+checkpoints_dir: "./checkpoints/"              #models are saved here
+serial_batches: True                           #if true, takes images in order to make batches, otherwise takes them randomly
+resize_or_crop: "scale_and_crop"               #scaling and cropping of images at load time [resize_and_crop|crop|scale_width|scale_width_and_crop|none]
+no_flip: True                                  #if specified, do not flip the images for data augmentation
+init_type: "normal"                            #network initialization [normal|xavier|kaiming|orthogonal]
+init_gain: 0.02                                #scaling factor for normal, xavier and orthogonal
+suffix: ""                                     #customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{loadSize}
+
+# model
+backbone: "CLIP:ViT-L/14"
+num_classes: 2
+num_vit_adapter: 3
+
+# frequency
+hidden_dim: 768
+clip_vision_width: 1024
+frequency_encoder_layer: 2
+decoder_layer: 4
+num_heads: 12
+interaction_indexes: [[0, 7], [8, 15], [16, 23]]
+
+#for data augmentation
+rz_interp: ["bilinear"]
+blur_prob: 0.5
+blur_sig: [0,3]
+jpg_prob: 0.2
+jpg_method: ["cv2"]
+jpg_qual: [30,100]
+
+
+#test options
+model_path: ""
+no_resize: True
+no_crop: False
+eval: True                                
+
+#train options
+isTrain: True
+epoch: 20                                
+earlystop_epoch: 3
+data_aug: True                                
+new_optim: True                               
+loss_freq: 20                                
+save_latest_freq: 2000                        
+save_epoch_freq: 20                           
+train_split: "train/RandomCmp"                 
+val_split: "train/RandomCmp"                          
+beta1: 0.9                                    
+
+lr: 0.00002                                   
+weight_decay: 0.0004                            
+momentum: 0.9
+adv_warmup: 0
+delr_freq: 10
+
+alpha: 1.0
+adv_warmup: 3
+warming_up: 3
+max_grad_norm: 1.0
+gamma: 0.004
+
+#experiment setting
+agnostic: False        # test
+mode: "StaticCmp"  # train
+
